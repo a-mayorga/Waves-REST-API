@@ -41,3 +41,6 @@ D:\Desktop\RestAPI\WebAPI\WebAPI\bin\System.Web.Http.WebHost.xml
 D:\Desktop\RestAPI\WebAPI\WebAPI\obj\Debug\WebAPI.csprojResolveAssemblyReference.cache
 D:\Desktop\RestAPI\WebAPI\WebAPI\obj\Debug\WebAPI.dll
 D:\Desktop\RestAPI\WebAPI\WebAPI\obj\Debug\WebAPI.pdb
+D:\Desktop\RestAPI\WebAPI\WebAPI\bin\System.Web.Cors.dll
+D:\Desktop\RestAPI\WebAPI\WebAPI\bin\System.Web.Http.Cors.dll
+D:\Desktop\RestAPI\WebAPI\WebAPI\bin\System.Web.Http.Cors.xml

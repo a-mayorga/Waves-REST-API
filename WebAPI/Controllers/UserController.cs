@@ -87,13 +87,33 @@ namespace WebAPI.Controllers
         }
 
         // POST: api/user
-        public string PostUser([FromBody] Models.User user)
+        public string PostUser(Models.User user)
         {
-            return user.name;
+            MySqlConnection conn = Connection.GetConnection();
+
+            try
+            {
+                string query = String.Format("INSERT INTO user(userName, userEmail, userPassword, userNickname, userStatus) VALUES('{0}', '{1}', '{2}', '{3}', {4});", user.name, user.email, user.password, user.username, user.status);
+
+                MySqlCommand insert = new MySqlCommand(query, conn);
+                insert.ExecuteNonQuery();
+
+                return "Bienvenido a Waves";
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return e.Message;
+            }
+            finally
+            {
+                conn.Close();
+                conn.Dispose();
+            }
         }
 
-        // PUT: api/user/{id}
-        public void PutUser(int id, [FromBody] Models.User user)
+        // PUT: api/user
+        public void PutUser(Models.User user)
         {
         }
 
