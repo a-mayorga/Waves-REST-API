@@ -7,6 +7,7 @@ namespace WebAPI.Models
 {
     public class Player
     {
+        public int songID { get; set; }
         public int albumID { get; set; }
         public string songName { get; set; }
         public string artistName { get; set; }

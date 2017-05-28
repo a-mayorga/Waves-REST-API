@@ -20,13 +20,14 @@ namespace WebAPI.Controllers
             try
             {
                 MySqlCommand cmd = conn.CreateCommand();
-                cmd.CommandText = String.Format("SELECT al.albumID,s.songName,art.artistName,al.albumTitle FROM song s,artist art,album al WHERE s.songArtist = art.artistID AND s.songAlbum = al.albumID AND s.songID = '{0}';", id);
+                cmd.CommandText = String.Format("SELECT al.albumID,s.songID,s.songName,art.artistName,al.albumTitle FROM song s,artist art,album al WHERE s.songArtist = art.artistID AND s.songAlbum = al.albumID AND s.songID = '{0}';", id);
                 MySqlDataReader reader = cmd.ExecuteReader();
 
                 while (reader.Read())
                 {
                     song.Add(new Models.Player()
                     {
+                        songID = int.Parse(reader["songID"].ToString()),
                         albumID = int.Parse(reader["albumID"].ToString()),
                         songName = reader["songName"].ToString(),
                         artistName = reader["artistName"].ToString(),
