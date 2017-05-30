@@ -8,6 +8,7 @@ using MySql.Data.MySqlClient;
 
 namespace WebAPI.Controllers
 {
+    [RoutePrefix("api/song")]
     public class AlbumController : ApiController
     {
         // GET: api/album
@@ -19,7 +20,7 @@ namespace WebAPI.Controllers
             try
             {
                 MySqlCommand cmd = conn.CreateCommand();
-                cmd.CommandText = "SELECT al.albumID,al.albumTitle,al.albumDate,gen.genreName FROM album al, genre gen WHERE al.albumGenre = gen.genreID;";
+                cmd.CommandText = "SELECT al.albumID, al.albumTitle, al.albumYear, gen.genreName FROM album al, genre gen WHERE al.albumGenre = gen.genreID;";
                 MySqlDataReader reader = cmd.ExecuteReader();
 
                 while (reader.Read())
@@ -28,7 +29,7 @@ namespace WebAPI.Controllers
                     {
                         id = int.Parse(reader["albumID"].ToString()),
                         title = reader["albumTitle"].ToString(),
-                        year = reader["albumDate"].ToString(),
+                        year = reader["albumYear"].ToString(),
                         genre = reader["genreName"].ToString(),
                     };                    
 
@@ -83,7 +84,7 @@ namespace WebAPI.Controllers
                 conn.Close();
                 conn.Dispose();
             }
-        }
+        }        
 
         // POST: api/album
         public string PostAlbum(Models.Album album)
