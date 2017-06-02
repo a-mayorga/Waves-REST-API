@@ -134,6 +134,96 @@ namespace WebAPI.Controllers
             }
         }
 
+        // GET: api/song/artist/{id}
+        [HttpGet]
+        [Route("album/{idAlbum:int}")]
+        public List<Models.Song> GetSongsByAlbum(int idAlbum)
+        {
+            List<Models.Song> songs = new List<Models.Song>();
+            MySqlConnection conn = Connection.GetConnection();
+
+            try
+            {
+                MySqlCommand cmd = conn.CreateCommand();
+                cmd.CommandText = String.Format("SELECT s.songID, s.songName, s.songAlbum, ar.artistName, al.albumTitle, al.albumYear, gen.genreName, s.songNumber FROM song s, artist ar, album al, genre gen WHERE s.songAlbum = {0} AND s.songArtist = ar.artistID AND s.songAlbum = al.albumID AND s.songGenre = gen.genreID;", idAlbum);
+                MySqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    Models.Song song = new Models.Song()
+                    {
+                        id = int.Parse(reader["songID"].ToString()),
+                        name = reader["songName"].ToString(),
+                        artist = reader["artistName"].ToString(),
+                        album = reader["albumTitle"].ToString(),
+                        albumYear = reader["albumYear"].ToString(),
+                        albumID = int.Parse(reader["songAlbum"].ToString()),
+                        genre = reader["genreName"].ToString(),
+                        songNumber = int.Parse(reader["songNumber"].ToString())
+                    };
+
+                    songs.Add(song);
+                }
+
+                return songs;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
+            }
+            finally
+            {
+                conn.Close();
+                conn.Dispose();
+            }
+        }
+
+        // GET: api/song/genre/{id}
+        [HttpGet]
+        [Route("genre/{idGenre:int}")]
+        public List<Models.Song> GetSongsByGenre(int idGenre)
+        {
+            List<Models.Song> songs = new List<Models.Song>();
+            MySqlConnection conn = Connection.GetConnection();
+
+            try
+            {
+                MySqlCommand cmd = conn.CreateCommand();
+                cmd.CommandText = String.Format("SELECT s.songID, s.songName, s.songAlbum, ar.artistName, al.albumTitle, al.albumYear, gen.genreName, s.songNumber FROM song s, artist ar, album al, genre gen WHERE s.songGenre = {0} AND s.songArtist = ar.artistID AND s.songAlbum = al.albumID AND s.songGenre = gen.genreID;", idGenre);
+                MySqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    Models.Song song = new Models.Song()
+                    {
+                        id = int.Parse(reader["songID"].ToString()),
+                        name = reader["songName"].ToString(),
+                        artist = reader["artistName"].ToString(),
+                        album = reader["albumTitle"].ToString(),
+                        albumYear = reader["albumYear"].ToString(),
+                        albumID = int.Parse(reader["songAlbum"].ToString()),
+                        genre = reader["genreName"].ToString(),
+                        songNumber = int.Parse(reader["songNumber"].ToString())
+                    };
+
+                    songs.Add(song);
+                }
+
+                return songs;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
+            }
+            finally
+            {
+                conn.Close();
+                conn.Dispose();
+            }
+        }
+
         // POST: api/song
         public string PostAlbum(Models.Song song)
         {
