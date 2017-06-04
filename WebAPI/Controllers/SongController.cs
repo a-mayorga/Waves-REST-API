@@ -20,7 +20,7 @@ namespace WebAPI.Controllers
             try
             {
                 MySqlCommand cmd = conn.CreateCommand();
-                cmd.CommandText = "SELECT s.songID, s.songName, ar.artistName, s.songAlbum, al.albumTitle, gen.genreName,s.songRoute  FROM song s, artist ar, album al, genre gen WHERE s.songArtist = ar.artistID AND s.songAlbum = al.albumID AND s.songGenre = gen.genreID;";
+                cmd.CommandText = "SELECT s.songID, s.songName, ar.artistName, s.songAlbum, s.songRoute, al.albumTitle, gen.genreName FROM song s, artist ar, album al, genre gen WHERE s.songArtist = ar.artistID AND s.songAlbum = al.albumID AND s.songGenre = gen.genreID;";
                 MySqlDataReader reader = cmd.ExecuteReader();
 
                 while (reader.Read())
@@ -102,7 +102,7 @@ namespace WebAPI.Controllers
             try
             {
                 MySqlCommand cmd = conn.CreateCommand();
-                cmd.CommandText = String.Format("SELECT s.songID, s.songName, s.songAlbum, ar.artistName, al.albumTitle, al.albumYear, gen.genreName, s.songNumber FROM song s, artist ar, album al, genre gen WHERE s.songArtist = {0} AND s.songArtist = ar.artistID AND s.songAlbum = al.albumID AND s.songGenre = gen.genreID;", idArtist);
+                cmd.CommandText = String.Format("SELECT s.songID, s.songName, s.songAlbum, s.songRoute, ar.artistName, al.albumTitle, al.albumYear, gen.genreName, s.songNumber FROM song s, artist ar, album al, genre gen WHERE s.songArtist = {0} AND s.songArtist = ar.artistID AND s.songAlbum = al.albumID AND s.songGenre = gen.genreID;", idArtist);
                 MySqlDataReader reader = cmd.ExecuteReader();
 
                 while (reader.Read())
@@ -116,7 +116,8 @@ namespace WebAPI.Controllers
                         albumYear = reader["albumYear"].ToString(),
                         albumID = int.Parse(reader["songAlbum"].ToString()),
                         genre = reader["genreName"].ToString(),
-                        songNumber = int.Parse(reader["songNumber"].ToString())
+                        songNumber = int.Parse(reader["songNumber"].ToString()),
+                        songRoute = reader["songRoute"].ToString()
                     };
 
                     songs.Add(song);
@@ -147,7 +148,7 @@ namespace WebAPI.Controllers
             try
             {
                 MySqlCommand cmd = conn.CreateCommand();
-                cmd.CommandText = String.Format("SELECT s.songID, s.songName, s.songAlbum, ar.artistName, al.albumTitle, al.albumYear, gen.genreName, s.songNumber FROM song s, artist ar, album al, genre gen WHERE s.songAlbum = {0} AND s.songArtist = ar.artistID AND s.songAlbum = al.albumID AND s.songGenre = gen.genreID;", idAlbum);
+                cmd.CommandText = String.Format("SELECT s.songID, s.songName, s.songAlbum, s.songRoute, ar.artistName, al.albumTitle, al.albumYear, gen.genreName, s.songNumber FROM song s, artist ar, album al, genre gen WHERE s.songAlbum = {0} AND s.songArtist = ar.artistID AND s.songAlbum = al.albumID AND s.songGenre = gen.genreID;", idAlbum);
                 MySqlDataReader reader = cmd.ExecuteReader();
 
                 while (reader.Read())
@@ -161,7 +162,8 @@ namespace WebAPI.Controllers
                         albumYear = reader["albumYear"].ToString(),
                         albumID = int.Parse(reader["songAlbum"].ToString()),
                         genre = reader["genreName"].ToString(),
-                        songNumber = int.Parse(reader["songNumber"].ToString())
+                        songNumber = int.Parse(reader["songNumber"].ToString()),
+                        songRoute = reader["songRoute"].ToString()
                     };
 
                     songs.Add(song);
@@ -192,7 +194,7 @@ namespace WebAPI.Controllers
             try
             {
                 MySqlCommand cmd = conn.CreateCommand();
-                cmd.CommandText = String.Format("SELECT s.songID, s.songName, s.songAlbum, ar.artistName, al.albumTitle, al.albumYear, gen.genreName, s.songNumber FROM song s, artist ar, album al, genre gen WHERE s.songGenre = {0} AND s.songArtist = ar.artistID AND s.songAlbum = al.albumID AND s.songGenre = gen.genreID;", idGenre);
+                cmd.CommandText = String.Format("SELECT s.songID, s.songName, s.songAlbum, s.songRoute, ar.artistName, al.albumTitle, al.albumYear, gen.genreName, s.songNumber FROM song s, artist ar, album al, genre gen WHERE s.songGenre = {0} AND s.songArtist = ar.artistID AND s.songAlbum = al.albumID AND s.songGenre = gen.genreID;", idGenre);
                 MySqlDataReader reader = cmd.ExecuteReader();
 
                 while (reader.Read())
@@ -206,7 +208,8 @@ namespace WebAPI.Controllers
                         albumYear = reader["albumYear"].ToString(),
                         albumID = int.Parse(reader["songAlbum"].ToString()),
                         genre = reader["genreName"].ToString(),
-                        songNumber = int.Parse(reader["songNumber"].ToString())
+                        songNumber = int.Parse(reader["songNumber"].ToString()),
+                        songRoute = reader["songRoute"].ToString()
                     };
 
                     songs.Add(song);
@@ -227,7 +230,7 @@ namespace WebAPI.Controllers
         }
 
         // POST: api/song
-        public string PostAlbum(Models.Song song)
+        public string PostSong(Models.Song song)
         {
             MySqlConnection conn = Connection.GetConnection();
 
