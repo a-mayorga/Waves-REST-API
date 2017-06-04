@@ -15,5 +15,6 @@ namespace WebAPI.Models
         public int albumID { get; set; }
         public string genre { get; set; }
         public int songNumber { get; set; }
+        public string songRoute { get; set; }
     }
 }

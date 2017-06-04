@@ -20,7 +20,7 @@ namespace WebAPI.Controllers
             try
             {
                 MySqlCommand cmd = conn.CreateCommand();
-                cmd.CommandText = "SELECT s.songID, s.songName, ar.artistName, s.songAlbum, al.albumTitle, gen.genreName FROM song s, artist ar, album al, genre gen WHERE s.songArtist = ar.artistID AND s.songAlbum = al.albumID AND s.songGenre = gen.genreID;";
+                cmd.CommandText = "SELECT s.songID, s.songName, ar.artistName, s.songAlbum, al.albumTitle, gen.genreName,s.songRoute  FROM song s, artist ar, album al, genre gen WHERE s.songArtist = ar.artistID AND s.songAlbum = al.albumID AND s.songGenre = gen.genreID;";
                 MySqlDataReader reader = cmd.ExecuteReader();
 
                 while (reader.Read())
@@ -33,6 +33,8 @@ namespace WebAPI.Controllers
                         album = reader["albumTitle"].ToString(),
                         albumID = int.Parse(reader["songAlbum"].ToString()),
                         genre = reader["genreName"].ToString(),
+                        songRoute = reader["songRoute"].ToString(),
+
                     };
 
                     songs.Add(song);
