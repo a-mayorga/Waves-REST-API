@@ -10,43 +10,43 @@ namespace WebAPI.Controllers
 {
     public class LibraryController : ApiController
     {
-        // GET: api/Library
-        public IEnumerable<string> Get()
+        // GET: api/library
+        public IEnumerable<string> GetLibrary()
         {
             return new string[] { "value1", "value2" };
         }
 
-        // GET: api/Library/5
-        public List<Models.Library> GetLibrary(int id)
+        // GET: api/library/{id}
+        public List<Models.Song> GetLibrary(int id)
         {
-            List<Models.Library> librarySongs = new List<Models.Library>();
-
+            List<Models.Song> songs = new List<Models.Song>();
             MySqlConnection conn = Connection.GetConnection();
 
             try
             {
                 MySqlCommand cmd = conn.CreateCommand();
-                cmd.CommandText = String.Format("SELECT lib.libraryID,lib.libraryContentID,s.songID,s.songAlbum,s.songName,a.artistName,al.albumTitle,gen.genreName FROM library_content libc,library lib,song s,album al,artist a,genre gen WHERE lib.userID = 3 AND lib.libraryID = libc.libraryID AND libc.songID = s.songID AND s.songArtist = a.artistID AND s.songAlbum = al.albumID AND s.songGenre = gen.genreID;", id);
+                cmd.CommandText = String.Format("SELECT lib.libraryID, lib.libraryContentID, s.songID, s.songAlbum, s.songName, s.songNumber, s.songRoute, a.artistName, al.albumTitle, al.albumYear, gen.genreName FROM library_content libc, library lib, song s, album al, artist a, genre gen WHERE lib.userID = {0} AND lib.libraryID = libc.libraryID AND libc.songID = s.songID AND s.songArtist = a.artistID AND s.songAlbum = al.albumID AND s.songGenre = gen.genreID;", id);
                 MySqlDataReader reader = cmd.ExecuteReader();
 
                 while (reader.Read())
                 {
-                    Models.Library library = new Models.Library();
+                    Models.Song song = new Models.Song()
                     {
-                        library.songID = int.Parse(reader["songID"].ToString());
-                        library.albumID = int.Parse(reader["songAlbum"].ToString());
-                        library.libraryID = int.Parse(reader["libraryID"].ToString());
-                        library.libraryContentID = int.Parse(reader["libraryContentID"].ToString());
-                        library.songName = reader["songName"].ToString();
-                        library.artistName = reader["artistName"].ToString();
-                        library.albumTitle = reader["albumTitle"].ToString();
-                        library.genreName = reader["genreName"].ToString();
+                        id = int.Parse(reader["songID"].ToString()),
+                        name = reader["songName"].ToString(),
+                        artist = reader["artistName"].ToString(),
+                        album = reader["albumTitle"].ToString(),
+                        albumYear = reader["albumYear"].ToString(),
+                        albumID = int.Parse(reader["songAlbum"].ToString()),
+                        genre = reader["genreName"].ToString(),
+                        songNumber = int.Parse(reader["songNumber"].ToString()),
+                        songRoute = reader["songRoute"].ToString()
                     };
 
-                    librarySongs.Add(library);
+                    songs.Add(song);
                 }
-             
-                return librarySongs;
+
+                return songs;
             }
             catch (Exception e)
             {
@@ -60,17 +60,50 @@ namespace WebAPI.Controllers
             }
         }
 
-        // POST: api/Library
-        public void Post([FromBody]string value)
+        // POST: api/library
+        public string Post(Models.Library library)
+        {
+            MySqlConnection conn = Connection.GetConnection();
+
+            try
+            {
+                MySqlCommand cmd = conn.CreateCommand();
+                cmd.CommandText = String.Format("SELECT libraryID FROM library WHERE userID = {0};", library.userID);
+                MySqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    library.libraryID = int.Parse(reader["libraryID"].ToString());
+                }
+
+                conn.Close();
+                conn.Open();
+
+                string query = String.Format("INSERT INTO library_content(libraryID, songID) VALUES({0}, {1});", library.libraryID, library.songID);
+
+                MySqlCommand insert = new MySqlCommand(query, conn);
+                insert.ExecuteNonQuery();
+
+                return "Canción agregada a tu biblioteca";
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return e.Message;
+            }
+            finally
+            {
+                conn.Close();
+                conn.Dispose();
+            }
+        }
+
+        // PUT: api/library
+        public void Put(Models.Song song)
         {
         }
 
-        // PUT: api/Library/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE: api/Library/5
+        // DELETE: api/library/{id}
         public void Delete(int id)
         {
         }
