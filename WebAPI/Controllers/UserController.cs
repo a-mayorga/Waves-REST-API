@@ -97,6 +97,26 @@ namespace WebAPI.Controllers
 
                 MySqlCommand insert = new MySqlCommand(query, conn);
                 insert.ExecuteNonQuery();
+                conn.Close();
+                conn.Open();
+
+                MySqlCommand cmd = conn.CreateCommand();
+                cmd.CommandText = String.Format("SELECT userID FROM user WHERE userNickname = '{0}';", user.username);
+                MySqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    user.id = int.Parse(reader["userID"].ToString());
+                }
+                conn.Close();
+                conn.Open();
+
+                string queryLibrary = String.Format("INSERT INTO library(userID) VALUES({0});", user.id);
+
+                MySqlCommand insertLibrary = new MySqlCommand(queryLibrary, conn);
+                insertLibrary.ExecuteNonQuery();
+
+                conn.Close();
 
                 return "Bienvenido a Waves";
             }
