@@ -25,7 +25,7 @@ namespace WebAPI.Controllers
             try
             {
                 MySqlCommand cmd = conn.CreateCommand();
-                cmd.CommandText = String.Format("SELECT lib.libraryID, lib.libraryContentID, s.songID, s.songAlbum, s.songName, s.songNumber, s.songRoute, a.artistName, al.albumTitle, al.albumYear, gen.genreName FROM library_content libc, library lib, song s, album al, artist a, genre gen WHERE lib.userID = {0} AND lib.libraryID = libc.libraryID AND libc.songID = s.songID AND s.songArtist = a.artistID AND s.songAlbum = al.albumID AND s.songGenre = gen.genreID;", id);
+                cmd.CommandText = String.Format("SELECT lib.libraryID, s.songID, s.songAlbum, s.songName, s.songNumber, s.songRoute, a.artistName, al.albumTitle, al.albumYear, gen.genreName FROM library_content libc, library lib, song s, album al, artist a, genre gen WHERE lib.userID = {0} AND lib.libraryID = libc.libraryID AND libc.songID = s.songID AND s.songArtist = a.artistID AND s.songAlbum = al.albumID AND s.songGenre = gen.genreID;", id);
                 MySqlDataReader reader = cmd.ExecuteReader();
 
                 while (reader.Read())
@@ -97,7 +97,7 @@ namespace WebAPI.Controllers
                 conn.Dispose();
             }
         }
-
+       
         // PUT: api/library
         public void Put(Models.Song song)
         {

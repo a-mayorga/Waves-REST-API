@@ -126,6 +126,7 @@
     <Compile Include="Controllers\AlbumController.cs" />
     <Compile Include="Controllers\ArtistController.cs" />
     <Compile Include="Controllers\AuthController.cs" />
+    <Compile Include="Controllers\DeleteController.cs" />
     <Compile Include="Controllers\GenreController.cs" />
     <Compile Include="Controllers\LibraryController.cs" />
     <Compile Include="Controllers\PlayerController.cs" />
